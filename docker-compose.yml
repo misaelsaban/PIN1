@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  jenkins:
+    image: mguazzardo/pipe-seg
+    #image: jenkins/jenkins:2.424-jdk11
+    privileged: true
+    user: root
+    ports:
+     - 8080:8080
+       #- 50000:50000
+    container_name: jenkins-GRUPO4
+    volumes:
+      #- /home/guscba/DevOps/PIN_1/jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: "always"
+
+  nexus:
+    image: sonatype/nexus3:3.60.0
+    ports:
+      - 8081:8081
+      - 8082:8082
+    container_name: nexus-GusCBA
+    volumes:
+      - /home/guscba/DevOps/PIN_1/nexus:/nexus-data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: "always"
+
+  registry:
+    image: registry:2.8.2
+    container_name: registry-GRUPO4
+    ports:
+    - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - /home/guscba/DevOps/PIN_1/registry/data:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
